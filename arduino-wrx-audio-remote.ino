@@ -1,34 +1,65 @@
 /*
-  PlayPause
+  WRX Audio Remote
 
- Alternates between writing play and pause to the Alpine head unit
- every three seconds.
+  Provides a physical control interface for a touchscreen Alpine head unit, for this
+  vehicle the interface of choice is a Sony RM-MC25C rotary commander.
 
+  Communication with the head unit is provided by Mattias Winther's AlpineRemote library.
 
- The circuit:
- 3.5mm phono jack tip connected to pin 3 on the Arduino.
-
- created 2016
- by Mattias Winther <mattias.winther@gmail.com>
-
- This example code is based on the Button example for the Arduino and is released
- in the public domain.
-
+  Written by Adam J. Bauman.
+  BSD license, all text above must be included in any redistribution
  */
 
 #include "AlpineRemote.h"
+#include "SonyResistorRemote.h"
 
-// constants won't change. They're used here to
-// set pin numbers:
-const int alpinePin =  3;      // the number of the Alpine +5V pin (the tip of the 3.5mm plug)
+// Uncomment to enable debug output to serial console.
+#define _DEBUG;
 
-// initialize an AlpineRemote instance:
-AlpineRemote alpine(alpinePin);
+constexpr int alpine_remote_pin = 3; // Plug tip, sleeve and/or ring connected to Arduino GND bus.
+constexpr int sony_resistor_remote_pin = A0; // Input from Sony resistor remote, use with 10K pulldown resistor
 
-void setup() {
+// Initialize the Alpine remote output and Sony remote input bits.
+AlpineRemote alpine_output(alpine_remote_pin);
+SonyRM_MC25C sony_input(sony_resistor_remote_pin);
+
+void setup() 
+{
+#ifdef _DEBUG
+    Serial.begin(9600);
+#endif
 }
 
-void loop() {
-  alpine.writePlayPause();
-  delay(3000);
+void loop() 
+{
+  // Read the Sony remote and act on any incoming commands.
+   switch(sony_input.Read()) {
+    case SonyResistorRemote::Control::PlayPause:
+      Serial.println("PlayPause");
+      break;
+
+    case SonyResistorRemote::Control::Stop:
+      Serial.println("Stop");
+      break;
+
+    case SonyResistorRemote::Control::TwistRight:
+      Serial.println("Spin Right");
+      break;
+
+    case SonyResistorRemote::Control::TwistLeft:
+      Serial.println("Spin Left");
+      break;
+
+    case SonyResistorRemote::Control::TwistRightShift:
+      Serial.println("Spin Right Shifted");
+      break;
+
+    case SonyResistorRemote::Control::TwistLeftShift:
+      Serial.println("Spin Left Shifted");
+      break;
+    
+    default:
+      break;
+  }
+
 }
