@@ -32,8 +32,10 @@ void setup()
 
 void loop() 
 {
+  //TODO: Send commands, debounce on sony_command.debounce_ms
   // Read the Sony remote and act on any incoming commands.
-   switch(sony_input.Read()) {
+  SonyCommand sony_command = sony_input.Read();
+   switch(sony_command.control) {
     case SonyResistorRemote::Control::PlayPause:
       Serial.println("PlayPause");
       break;
