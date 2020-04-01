@@ -20,7 +20,7 @@ constexpr int alpine_remote_pin = 3; // Plug tip, sleeve and/or ring connected t
 constexpr int sony_resistor_remote_pin = A0; // Input from Sony resistor remote, use with 10K pulldown resistor
 
 // Initialize the Alpine remote output and Sony remote input bits.
-AlpineRemote alpine_output(alpine_remote_pin);
+AlpineRemote alpine_remote(alpine_remote_pin);
 SonyRM_MC25C sony_input(sony_resistor_remote_pin);
 
 void setup() 
@@ -37,27 +37,27 @@ void loop()
   SonyCommand sony_command = sony_input.Read();
   switch(sony_command.control) {
     case SonyResistorRemote::Control::PlayPause:
-        Serial.println("PlayPause");
+        alpine_remote.writePlayPause();
         break;
 
     case SonyResistorRemote::Control::Stop:
-        Serial.println("Stop");
+        alpine_remote.writeMute();
         break;
 
     case SonyResistorRemote::Control::TwistRight:
-        Serial.println("Spin Right");
+        alpine_remote.writeVolumeUp();
         break;
 
     case SonyResistorRemote::Control::TwistLeft:
-        Serial.println("Spin Left");
+        alpine_remote.writeVolumeDown();
         break;
 
     case SonyResistorRemote::Control::TwistRightShift:
-        Serial.println("Spin Right Shifted");
+        alpine_remote.writeTrackUp();
         break;
 
     case SonyResistorRemote::Control::TwistLeftShift:
-        Serial.println("Spin Left Shifted");
+        alpine_remote.writeTrackDown();
         break;
     
     default:

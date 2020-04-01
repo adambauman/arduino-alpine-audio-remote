@@ -42,12 +42,12 @@ namespace SonyResistorRemote {
         namespace TwistRight {
             constexpr int MinValue = 700;
             constexpr int MaxValue = 800;
-            constexpr int DebounceMS = 200; // Can drop debounce for faster repeat rate
+            constexpr int DebounceMS = 150; // Can drop debounce for faster repeat rate
         }
         namespace TwistLeft {
             constexpr int MinValue = 825;
             constexpr int MaxValue = 945; // Approaching lower limit of PlayPause
-            constexpr int DebounceMS = 200; // Can drop debounce for faster repeat rate
+            constexpr int DebounceMS = 150; // Can drop debounce for faster repeat rate
         }
         namespace TwistRightShift {
             constexpr int MinValue = 400;
