@@ -35,33 +35,45 @@ void loop()
   //TODO: Send commands, debounce on sony_command.debounce_ms
   // Read the Sony remote and act on any incoming commands.
   SonyCommand sony_command = sony_input.Read();
-   switch(sony_command.control) {
+  switch(sony_command.control) {
     case SonyResistorRemote::Control::PlayPause:
-      Serial.println("PlayPause");
-      break;
+        Serial.println("PlayPause");
+        break;
 
     case SonyResistorRemote::Control::Stop:
-      Serial.println("Stop");
-      break;
+        Serial.println("Stop");
+        break;
 
     case SonyResistorRemote::Control::TwistRight:
-      Serial.println("Spin Right");
-      break;
+        Serial.println("Spin Right");
+        break;
 
     case SonyResistorRemote::Control::TwistLeft:
-      Serial.println("Spin Left");
-      break;
+        Serial.println("Spin Left");
+        break;
 
     case SonyResistorRemote::Control::TwistRightShift:
-      Serial.println("Spin Right Shifted");
-      break;
+        Serial.println("Spin Right Shifted");
+        break;
 
     case SonyResistorRemote::Control::TwistLeftShift:
-      Serial.println("Spin Left Shifted");
-      break;
+        Serial.println("Spin Left Shifted");
+        break;
     
     default:
-      break;
+        break;
   }
+
+#ifdef _DEBUG
+  // Display some debug info if we have a possible command
+  if(10 < sony_command.analog_in_value) {
+    Serial.println(sony_input.GetControlName(sony_command.control));
+    Serial.print("Analog value: ");
+    Serial.println(sony_command.analog_in_value);
+  }
+#endif
+
+
+  delay(sony_command.debounce_ms);
 
 }

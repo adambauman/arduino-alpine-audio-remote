@@ -25,12 +25,13 @@ SonyRM_MC25C::~SonyRM_MC25C() {}
 
 
 SonyCommand SonyRM_MC25C::Read() 
-{
-    int analog_value = analogRead(m_analog_in_pin);
-
+{    
     using namespace SonyResistorRemote;
-    
+
     SonyCommand sony_command;
+    sony_command.analog_in_value = analogRead(m_analog_in_pin);
+    int& analog_value = sony_command.analog_in_value;
+
     if (analog_value > RM_MC25C::PlayPause::MinValue && analog_value < RM_MC25C::PlayPause::MaxValue) { 
         sony_command.control = Control::PlayPause;
         sony_command.debounce_ms = RM_MC25C::PlayPause::DebounceMS;
@@ -63,7 +64,48 @@ SonyCommand SonyRM_MC25C::Read()
     }
     else {
       sony_command.control = Control::Unknown;
+      sony_command.debounce_ms = default_debouce_ms;
+      sony_command.analog_in_value = analog_value;
     }
 
     return(sony_command);
 }
+
+String SonyRM_MC25C::GetControlName(const SonyResistorRemote::Control control)
+{
+    using namespace SonyResistorRemote;
+
+    String control_name;
+    switch(control) {
+    case SonyResistorRemote::Control::PlayPause:
+        control_name = "PlayPause";
+        break;
+
+    case SonyResistorRemote::Control::Stop:
+        control_name = "Stop";
+        break;
+
+    case SonyResistorRemote::Control::TwistRight:
+        control_name = "Spin Right";
+        break;
+
+    case SonyResistorRemote::Control::TwistLeft:
+        control_name = "Spin Left";
+        break;
+
+    case SonyResistorRemote::Control::TwistRightShift:
+        control_name = "Spin Right Shifted";
+        break;
+
+    case SonyResistorRemote::Control::TwistLeftShift:
+        control_name = "Spin Left Shifted";
+        break;
+    
+    default:
+        control_name = "Unknown";
+        break;
+    }
+
+    return(control_name);
+}
+

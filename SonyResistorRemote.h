@@ -16,6 +16,8 @@
 //      to tweak debounce depending on how loosy-goosy your Sony controller is.
 namespace SonyResistorRemote {
 
+    constexpr auto default_debouce_ms = 50;
+
     enum Control {
         Unknown,
         PlayPause,
@@ -40,17 +42,17 @@ namespace SonyResistorRemote {
         namespace TwistRight {
             constexpr int MinValue = 700;
             constexpr int MaxValue = 800;
-            constexpr int DebounceMS = 100;
+            constexpr int DebounceMS = 200; // Can drop debounce for faster repeat rate
         }
         namespace TwistLeft {
             constexpr int MinValue = 825;
             constexpr int MaxValue = 945; // Approaching lower limit of PlayPause
-            constexpr int DebounceMS = 100;
+            constexpr int DebounceMS = 200; // Can drop debounce for faster repeat rate
         }
         namespace TwistRightShift {
             constexpr int MinValue = 400;
             constexpr int MaxValue = 500;
-            constexpr int DebounceMS = 300;
+            constexpr int DebounceMS = 300; 
         }
         namespace TwistLeftShift {
             constexpr int MinValue = 635; // Approaching upper limit of Stop
@@ -73,6 +75,7 @@ public:
     ~SonyRM_MC25C();
 
     SonyCommand Read();
+    String GetControlName(const SonyResistorRemote::Control control);
 
 private:
     int m_analog_in_pin = 0;
