@@ -1,0 +1,5 @@
+{
+    "programmer": "ArduinoISP",
+    "board": "SparkFun:avr:promicro",
+    "configuration": "cpu=16MHzatmega32U4"
+}

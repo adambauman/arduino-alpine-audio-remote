@@ -5,6 +5,7 @@
   vehicle the interface of choice is a Sony RM-MC25C rotary commander.
 
   Communication with the head unit is provided by Mattias Winther's AlpineRemote library.
+  https://github.com/Wnthr/arduino-alpine-remote
 
   Written by Adam J. Bauman.
   BSD license, all text above must be included in any redistribution
@@ -14,9 +15,9 @@
 #include "SonyResistorRemote.h"
 
 // Uncomment to enable debug output to serial console.
-#define _DEBUG;
+//#define _DEBUG;
 
-constexpr int alpine_remote_pin = 3; // Plug tip, sleeve and/or ring connected to Arduino GND bus.
+constexpr int alpine_remote_pin = 9; // Plug tip, sleeve and/or ring connected to Arduino GND bus.
 constexpr int sony_resistor_remote_pin = A0; // Input from Sony resistor remote, use with 10K pulldown resistor
 
 // Initialize the Alpine remote output and Sony remote input bits.
@@ -37,11 +38,12 @@ void loop()
   SonyCommand sony_command = sony_input.Read();
   switch(sony_command.control) {
     case SonyResistorRemote::Control::PlayPause:
+        // On iLX-W650 Play/Pause also mutes when on the radio input
         alpine_remote.writePlayPause();
         break;
 
     case SonyResistorRemote::Control::Stop:
-        alpine_remote.writeMute();
+        alpine_remote.writeSourceSelect();
         break;
 
     case SonyResistorRemote::Control::TwistRight:
